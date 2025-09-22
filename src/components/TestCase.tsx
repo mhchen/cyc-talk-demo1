@@ -1,5 +1,10 @@
 import { useState, useEffect, FC } from 'react';
-import { formatMetric, formatTotalTime, formatWithIterations } from '../utils/performance';
+import {
+  formatMetric,
+  formatTotalTime,
+  formatAverageTime,
+  formatWithIterations,
+} from '../utils/performance';
 import type { TestCase as TestCaseType, TestResult } from '../types';
 
 interface TestCaseProps {
@@ -22,9 +27,7 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
   }, [isRunning]);
 
   const getStatusEmoji = (): string => {
-    if (isRunning) return '⏱️';
-    if (result) return result.surprising ? '🤯' : '✅';
-    return '⏸️';
+    return '';
   };
 
   const getCardClass = (): string => {
@@ -46,7 +49,10 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
 
       {result && (
         <div className="iterations-info">
-          <small>Iterations: {result.withoutMemo?.iterations?.toLocaleString() || 'N/A'}</small>
+          <small>
+            Iterations:{' '}
+            {result.withoutMemo?.iterations?.toLocaleString() || 'N/A'}
+          </small>
         </div>
       )}
 
@@ -59,13 +65,21 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
                 <div className="metric">
                   <span className="metric-label">Without useMemo</span>
                   <span className="metric-value">
-                    {formatTotalTime(result.stableWithout!)}
+                    {result.stableWithout
+                      ? formatTotalTime(result.stableWithout)
+                      : 'N/A'}
                   </span>
                 </div>
                 <div className="metric">
                   <span className="metric-label">With useMemo</span>
-                  <span className={`metric-value ${result.stableWinner === 'with' ? 'faster' : 'slower'}`}>
-                    {formatTotalTime(result.stableWith!)}
+                  <span
+                    className={`metric-value ${
+                      result.stableWinner === 'with' ? 'faster' : 'slower'
+                    }`}
+                  >
+                    {result.stableWith
+                      ? formatTotalTime(result.stableWith)
+                      : 'N/A'}
                     {result.stableWinner === 'with' ? ' 🏆' : ' ⚠️'}
                   </span>
                 </div>
@@ -75,13 +89,21 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
                 <div className="metric">
                   <span className="metric-label">Without useMemo</span>
                   <span className="metric-value">
-                    {formatTotalTime(result.changingWithout!)}
+                    {result.changingWithout
+                      ? formatTotalTime(result.changingWithout)
+                      : 'N/A'}
                   </span>
                 </div>
                 <div className="metric">
                   <span className="metric-label">With useMemo</span>
-                  <span className={`metric-value ${result.changingWinner === 'with' ? 'faster' : 'slower'}`}>
-                    {formatTotalTime(result.changingWith!)}
+                  <span
+                    className={`metric-value ${
+                      result.changingWinner === 'with' ? 'faster' : 'slower'
+                    }`}
+                  >
+                    {result.changingWith
+                      ? formatTotalTime(result.changingWith)
+                      : 'N/A'}
                     {result.changingWinner === 'with' ? ' 🏆' : ' ⚠️'}
                   </span>
                 </div>
@@ -91,21 +113,35 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
             <>
               <div className="metric">
                 <span className="metric-label">Without useMemo</span>
-                <span className={`metric-value ${result.winner === 'without' ? 'faster' : 'slower'}`}>
-                  {formatTotalTime(result.withoutMemo!)}
+                <span
+                  className={`metric-value ${
+                    result.winner === 'without' ? 'faster' : 'slower'
+                  }`}
+                >
+                  {result.withoutMemo
+                    ? formatTotalTime(result.withoutMemo)
+                    : 'N/A'}
                   {result.winner === 'without' ? ' 🏆' : ''}
                 </span>
               </div>
               <div className="metric">
                 <span className="metric-label">With useMemo</span>
-                <span className={`metric-value ${result.winner === 'with' ? 'faster' : 'slower'}`}>
-                  {formatTotalTime(result.withMemo!)}
+                <span
+                  className={`metric-value ${
+                    result.winner === 'with' ? 'faster' : 'slower'
+                  }`}
+                >
+                  {result.withMemo ? formatTotalTime(result.withMemo) : 'N/A'}
                   {result.winner === 'with' ? ' 🏆' : ' ⚠️'}
                 </span>
               </div>
               <div className="metric">
                 <span className="metric-label">Difference</span>
-                <span className={`metric-value ${result.winner === 'with' ? 'faster' : 'slower'}`}>
+                <span
+                  className={`metric-value ${
+                    result.winner === 'with' ? 'faster' : 'slower'
+                  }`}
+                >
                   {result.winner === 'with' ? '↓' : '↑'}
                   {formatMetric(result.difference!, true)}
                 </span>

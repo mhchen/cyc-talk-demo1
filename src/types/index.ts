@@ -45,5 +45,4 @@ export interface TestCase {
   id: string;
   name: string;
   description: string;
-  run: () => TestResult;
 }

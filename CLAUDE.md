@@ -50,3 +50,6 @@ The application uses a sophisticated performance testing framework:
 - ESLint configured for React hooks and best practices
 - Performance measurements use `performance.now()` for high precision
 - Test iterations vary by complexity (100-100,000) to ensure statistical significance
+- This project uses bun
+
+Never run npm run dev to verify things. When I am working on this project, I always have a dev server running.

@@ -93,6 +93,10 @@ export const formatTotalTime = (metrics: { total: number }): string => {
   return formatMetric(metrics.total);
 };
 
+export const formatAverageTime = (metrics: { avg: number }): string => {
+  return formatMetric(metrics.avg);
+};
+
 export const formatWithIterations = (metrics: { total: number; iterations: number }): string => {
   const totalFormatted = formatMetric(metrics.total);
   const iterationsFormatted = metrics.iterations.toLocaleString();
