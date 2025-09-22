@@ -11,11 +11,14 @@ export const measurePerformance = (fn: () => any, iterations: number = 100): Per
 
   const sorted = times.sort((a, b) => a - b);
   const avg = times.reduce((a, b) => a + b, 0) / times.length;
+  const total = times.reduce((a, b) => a + b, 0);
   const median = sorted[Math.floor(times.length / 2)];
   const p95 = sorted[Math.floor(times.length * 0.95)];
 
   return {
     avg,
+    total,
+    iterations,
     median,
     min: Math.min(...times),
     max: Math.max(...times),
@@ -78,4 +81,20 @@ export const formatMetric = (value: number, isComparison: boolean = false): stri
   if (value < 1) return `${value.toFixed(3)}ms`;
   if (value < 1000) return `${value.toFixed(2)}ms`;
   return `${(value / 1000).toFixed(2)}s`;
+};
+
+export const formatTotalWithIterations = (metrics: { total: number; iterations: number }): string => {
+  const totalFormatted = formatMetric(metrics.total);
+  const iterationsFormatted = metrics.iterations.toLocaleString();
+  return `${totalFormatted} (${iterationsFormatted} iterations)`;
+};
+
+export const formatTotalTime = (metrics: { total: number }): string => {
+  return formatMetric(metrics.total);
+};
+
+export const formatWithIterations = (metrics: { total: number; iterations: number }): string => {
+  const totalFormatted = formatMetric(metrics.total);
+  const iterationsFormatted = metrics.iterations.toLocaleString();
+  return `${totalFormatted} (${iterationsFormatted})`;
 };

@@ -17,6 +17,8 @@ export interface Item {
 
 export interface PerformanceMetrics {
   avg: number;
+  total: number;
+  iterations: number;
   median: number;
   min: number;
   max: number;
@@ -25,16 +27,16 @@ export interface PerformanceMetrics {
 }
 
 export interface TestResult {
-  withoutMemo?: number;
-  withMemo?: number;
+  withoutMemo?: PerformanceMetrics;
+  withMemo?: PerformanceMetrics;
   difference?: number;
   winner?: 'with' | 'without';
   surprising?: boolean;
   // For rerender-impact test
-  stableWithout?: number;
-  stableWith?: number;
-  changingWithout?: number;
-  changingWith?: number;
+  stableWithout?: PerformanceMetrics;
+  stableWith?: PerformanceMetrics;
+  changingWithout?: PerformanceMetrics;
+  changingWith?: PerformanceMetrics;
   stableWinner?: 'with' | 'without';
   changingWinner?: 'with' | 'without';
 }

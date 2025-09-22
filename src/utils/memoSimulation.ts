@@ -1,34 +1,50 @@
 // Simulate useMemo behavior for performance testing
 // We can't use actual hooks outside of React components, so we simulate the memoization logic
 
+// React uses Object.is() for dependency comparison, not JSON.stringify
+function areEqual(a: any, b: any): boolean {
+  return Object.is(a, b);
+}
+
+function areDepsEqual(prevDeps: any[], nextDeps: any[]): boolean {
+  if (prevDeps.length !== nextDeps.length) {
+    return false;
+  }
+  for (let i = 0; i < prevDeps.length; i++) {
+    if (!areEqual(prevDeps[i], nextDeps[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
 export function simulateUseMemo<T>(factory: () => T, deps: any[]): T {
-  // This simulates the internal behavior of useMemo
-  // In a real scenario, this would be managed by React's fiber system
+  // This simulates the internal behavior of useMemo using React's actual comparison logic
+  // React uses Object.is() for dependency comparison, not JSON.stringify
 
   if (!simulateUseMemo.cache) {
-    simulateUseMemo.cache = new Map();
+    simulateUseMemo.cache = { value: undefined, deps: undefined };
   }
 
-  const key = JSON.stringify(deps);
-  const cached = simulateUseMemo.cache.get(key);
+  const cache = simulateUseMemo.cache as { value: T; deps: any[] } | { value: undefined; deps: undefined };
 
-  if (cached) {
-    return cached.value;
+  // Check if dependencies have changed using React's comparison logic
+  if (cache.deps !== undefined && areDepsEqual(cache.deps, deps)) {
+    return cache.value as T;
   }
 
+  // Dependencies changed or first run - compute new value
   const value = factory();
-  simulateUseMemo.cache.set(key, { value, deps });
+  simulateUseMemo.cache = { value, deps: [...deps] }; // Store copy of deps
 
   return value;
 }
 
 // Add static property to function for cache
-(simulateUseMemo as any).cache = new Map();
+(simulateUseMemo as any).cache = { value: undefined, deps: undefined };
 
 export function clearMemoCache() {
-  if ((simulateUseMemo as any).cache) {
-    (simulateUseMemo as any).cache.clear();
-  }
+  (simulateUseMemo as any).cache = { value: undefined, deps: undefined };
 }
 
 export function measureMemoizedOperation<T>(
@@ -49,10 +65,18 @@ export function measureMemoizedOperation<T>(
     times.push(end - start);
   }
 
+  const sorted = times.sort((a, b) => a - b);
+  const avg = times.reduce((a, b) => a + b, 0) / times.length;
+  const total = times.reduce((a, b) => a + b, 0);
+
   return {
-    avg: times.reduce((a, b) => a + b, 0) / times.length,
-    median: times.sort((a, b) => a - b)[Math.floor(times.length / 2)],
+    avg,
+    total,
+    iterations,
+    median: sorted[Math.floor(times.length / 2)],
     min: Math.min(...times),
-    max: Math.max(...times)
+    max: Math.max(...times),
+    p95: sorted[Math.floor(times.length * 0.95)],
+    raw: times
   };
 }
