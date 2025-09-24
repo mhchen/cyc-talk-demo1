@@ -6,7 +6,9 @@
       "Bash(bun run:*)",
       "Bash(bunx tsc:*)",
       "Bash(npm run build:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(bun add:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,10 @@
+import { createFileRoute } from '@tanstack/react-router'
 import { useState, useCallback } from 'react';
-import './App.css';
-import TestCase from './components/TestCase';
-import { WallClockTestOrchestrator } from './components/WallClockTestOrchestrator';
+import '../App.css';
+import TestCase from '../components/TestCase';
+import { WallClockTestOrchestrator } from '../components/WallClockTestOrchestrator';
+import { DemoLayout } from '../components/shared/DemoLayout';
+import { Button } from '../components/shared/Button';
 import {
   SimpleCalculationWithoutMemo,
   SimpleCalculationWithMemo,
@@ -15,8 +18,12 @@ import {
   ComplexCalculationWithMemo,
   FibonacciWithoutMemo,
   FibonacciWithMemo,
-} from './components/MemoTestComponents';
-import type { TestCase as TestCaseType, TestResult } from './types';
+} from '../components/MemoTestComponents';
+import type { TestCase as TestCaseType, TestResult } from '../types';
+
+export const Route = createFileRoute('/usememo')({
+  component: UseMemoDemo,
+})
 
 const TEST_PARAMETERS = {
   dataSize: 1000,
@@ -24,7 +31,7 @@ const TEST_PARAMETERS = {
   iterations: 10000,
 };
 
-function App() {
+function UseMemoDemo() {
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [testResults, setTestResults] = useState<Record<string, TestResult>>(
     {}
@@ -156,27 +163,24 @@ return fibonacci(20);`,
   };
 
   return (
-    <div className="container">
-      <div className="header">
-        <h1>React.useMemo</h1>
-        <p className="subtitle">When does memoization actually help?</p>
-      </div>
-
-      <div className="test-info">
-        <div className="button-group">
-          <button
-            className="btn btn-primary"
+    <DemoLayout
+      title="React.useMemo"
+      subtitle="When does memoization actually help?"
+      actions={
+        <>
+          <Button
+            variant="primary"
             onClick={runAllTests}
             disabled={isRunning}
           >
             {isRunning ? 'Running tests...' : 'Run all tests'}
-          </button>
-          <button className="btn btn-danger" onClick={resetDemo}>
+          </Button>
+          <Button variant="danger" onClick={resetDemo}>
             Reset demo
-          </button>
-        </div>
-      </div>
-
+          </Button>
+        </>
+      }
+    >
       <div className="test-cases">
         {testCases.map((testCase) => (
           <TestCase
@@ -243,8 +247,6 @@ return fibonacci(20);`,
           WithMemoComponent={FibonacciWithMemo}
         />
       )}
-    </div>
+    </DemoLayout>
   );
 }
-
-export default App;

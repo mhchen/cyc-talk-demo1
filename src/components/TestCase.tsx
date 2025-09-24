@@ -1,4 +1,4 @@
-import { useState, useEffect, FC } from 'react';
+import { useState, useEffect, useRef, FC } from 'react';
 import {
   formatMetric,
   formatTotalTime,
@@ -16,6 +16,13 @@ interface TestCaseProps {
 
 const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
   const [animating, setAnimating] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === dialogRef.current) {
+      dialogRef.current?.close();
+    }
+  };
 
   useEffect(() => {
     if (isRunning) {
@@ -152,15 +159,44 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
       )}
 
       {!result && !isRunning && (
-        <button className="btn btn-sm" onClick={() => onRun(test)}>
-          Run Test
-        </button>
+        <div className="test-actions">
+          <button className="btn btn-sm" onClick={() => onRun(test)}>
+            Run test
+          </button>
+          {test.codeSnippet && (
+            <button
+              className="btn-link"
+              onClick={() => dialogRef.current?.showModal()}
+            >
+              View code
+            </button>
+          )}
+        </div>
       )}
 
       {isRunning && (
         <div className="progress-bar">
           <div className="progress-fill"></div>
         </div>
+      )}
+
+      {test.codeSnippet && (
+        <dialog ref={dialogRef} className="code-dialog" onClick={handleDialogClick}>
+          <div className="dialog-content">
+            <div className="dialog-header">
+              <h3>{test.name}</h3>
+              <button
+                className="dialog-close"
+                onClick={() => dialogRef.current?.close()}
+              >
+                ×
+              </button>
+            </div>
+            <div className="code-content">
+              <div>{test.codeSnippet}</div>
+            </div>
+          </div>
+        </dialog>
       )}
     </div>
   );

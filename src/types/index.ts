@@ -45,4 +45,5 @@ export interface TestCase {
   id: string;
   name: string;
   description: string;
+  codeSnippet?: string;
 }
