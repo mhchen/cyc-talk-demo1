@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WorkerRouteImport } from './routes/worker'
 import { Route as UsememoRouteImport } from './routes/usememo'
 import { Route as SpinnerRouteImport } from './routes/spinner'
 import { Route as IndexRouteImport } from './routes/index'
 
+const WorkerRoute = WorkerRouteImport.update({
+  id: '/worker',
+  path: '/worker',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsememoRoute = UsememoRouteImport.update({
   id: '/usememo',
   path: '/usememo',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/spinner': typeof SpinnerRoute
   '/usememo': typeof UsememoRoute
+  '/worker': typeof WorkerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/spinner': typeof SpinnerRoute
   '/usememo': typeof UsememoRoute
+  '/worker': typeof WorkerRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/spinner': typeof SpinnerRoute
   '/usememo': typeof UsememoRoute
+  '/worker': typeof WorkerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/spinner' | '/usememo'
+  fullPaths: '/' | '/spinner' | '/usememo' | '/worker'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/spinner' | '/usememo'
-  id: '__root__' | '/' | '/spinner' | '/usememo'
+  to: '/' | '/spinner' | '/usememo' | '/worker'
+  id: '__root__' | '/' | '/spinner' | '/usememo' | '/worker'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   SpinnerRoute: typeof SpinnerRoute
   UsememoRoute: typeof UsememoRoute
+  WorkerRoute: typeof WorkerRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/worker': {
+      id: '/worker'
+      path: '/worker'
+      fullPath: '/worker'
+      preLoaderRoute: typeof WorkerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/usememo': {
       id: '/usememo'
       path: '/usememo'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SpinnerRoute: SpinnerRoute,
   UsememoRoute: UsememoRoute,
+  WorkerRoute: WorkerRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

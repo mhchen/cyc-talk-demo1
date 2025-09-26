@@ -15,7 +15,7 @@ function Index() {
         hands-on examples and real-time measurements.
       </p>
 
-      <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: '1fr 1fr' }}>
+      <div style={{ display: 'grid', gap: '1.5rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
         <Link to="/usememo" style={{ textDecoration: 'none' }}>
           <div style={{
             padding: '2rem',
@@ -72,6 +72,36 @@ function Index() {
             <p style={{ margin: 0, color: '#666', lineHeight: '1.5' }}>
               Why don't loading spinners show during heavy work? Explore microtasks
               vs macrotasks and the JavaScript event loop.
+            </p>
+          </div>
+        </Link>
+
+        <Link to="/worker" style={{ textDecoration: 'none' }}>
+          <div style={{
+            padding: '2rem',
+            border: '2px solid #ddd',
+            borderRadius: '8px',
+            backgroundColor: 'white',
+            transition: 'all 0.2s ease',
+            cursor: 'pointer'
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = '#007acc';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = '#ddd';
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+          >
+            <h3 style={{ margin: '0 0 1rem 0', color: '#007acc' }}>
+              ⚡ Web Worker Demo
+            </h3>
+            <p style={{ margin: 0, color: '#666', lineHeight: '1.5' }}>
+              Experience the difference between main thread vs web worker processing.
+              See how Fibonacci(42) freezes the UI on main thread but stays responsive with workers.
             </p>
           </div>
         </Link>
