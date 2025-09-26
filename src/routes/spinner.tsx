@@ -85,18 +85,18 @@ function SpinnerDemo() {
 
   return (
     <DemoLayout
-      title="Microtask Loading Spinner Test"
+      title="Microtask loading spinner test"
       subtitle="Why don't loading spinners show during heavy work?"
       actions={
         <>
           <Button onClick={handlePromiseChain} variant="secondary">
-            Promise Chain (No Spinner!)
+            Promise chain (No spinner!)
           </Button>
           <Button onClick={handleSetTimeout} variant="primary">
-            setTimeout (Shows Spinner!)
+            setTimeout (Shows spinner!)
           </Button>
           <Button onClick={handleAsyncWithBreaks} variant="primary">
-            Async with Breaks (Shows Spinner!)
+            Async with breaks (Shows spinner!)
           </Button>
         </>
       }

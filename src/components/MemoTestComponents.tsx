@@ -14,7 +14,7 @@ function calculateMetrics(times: number[]): PerformanceMetrics {
     min: Math.min(...times),
     max: Math.max(...times),
     p95: sorted[Math.floor(times.length * 0.95)],
-    raw: times,
+    raw: [], // Remove the 10k element array
   };
 }
 
@@ -40,6 +40,7 @@ export function SimpleCalculationWithoutMemo({
   useEffect(() => {
     const time = end - start;
     timesRef.current.push(time);
+
 
     if (timesRef.current.length >= maxIterations) {
       onComplete(calculateMetrics(timesRef.current));

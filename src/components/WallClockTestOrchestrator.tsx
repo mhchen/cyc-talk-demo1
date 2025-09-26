@@ -25,6 +25,7 @@ export function WallClockTestOrchestrator({
   const [withoutMemoResult, setWithoutMemoResult] = useState<PerformanceMetrics | null>(null);
   const [phaseStartTime, setPhaseStartTime] = useState(performance.now());
 
+
   const handleWithoutMemoComplete = useCallback(
     (metrics: PerformanceMetrics) => {
       const phaseTime = performance.now() - phaseStartTime;
@@ -59,13 +60,15 @@ export function WallClockTestOrchestrator({
         const difference =
           ((wallClockMetrics.avg - withoutMemoResult.avg) / withoutMemoResult.avg) * 100;
 
-        onComplete({
+        const result = {
           withoutMemo: withoutMemoResult,
           withMemo: wallClockMetrics,
           difference,
           winner: withoutMemoResult.avg < wallClockMetrics.avg ? 'without' : 'with',
           surprising: withoutMemoResult.avg < wallClockMetrics.avg,
-        });
+        };
+
+        onComplete(result);
 
         setPhase('complete');
       }

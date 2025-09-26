@@ -18,6 +18,7 @@ const TestCase: FC<TestCaseProps> = ({ test, isRunning, result, onRun }) => {
   const [animating, setAnimating] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
 
+
   const handleDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
     if (e.target === dialogRef.current) {
       dialogRef.current?.close();

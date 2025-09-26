@@ -21,7 +21,7 @@ function WorkerDemo() {
 
   return (
     <DemoLayout
-      title="Main Thread vs Web Worker"
+      title="Main thread vs web worker"
       subtitle="Calculating the 42nd Fibonacci number"
     >
       <div
@@ -33,14 +33,14 @@ function WorkerDemo() {
         }}
       >
         <WorkerPanel
-          title="🔴 Main Thread Panel"
+          title="🔴 Main thread panel"
           workload={workload}
           useWorker={false}
           onComplete={setMainThreadResult}
         />
 
         <WorkerPanel
-          title="✅ Web Worker Panel"
+          title="✅ Web worker panel"
           workload={workload}
           useWorker={true}
           onComplete={setWorkerResult}
@@ -58,7 +58,7 @@ function WorkerDemo() {
           }}
         >
           <h4 style={{ margin: '0 0 1rem 0', color: '#333' }}>
-            Performance Comparison
+            Performance comparison
           </h4>
           <div
             style={{
@@ -70,7 +70,7 @@ function WorkerDemo() {
             {mainThreadResult && (
               <div>
                 <h5 style={{ margin: '0 0 0.5rem 0', color: '#dc3545' }}>
-                  Main Thread Results
+                  Main thread results
                 </h5>
                 <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>
                   <div>{mainThreadResult.result}</div>
@@ -85,7 +85,7 @@ function WorkerDemo() {
             {workerResult && (
               <div>
                 <h5 style={{ margin: '0 0 0.5rem 0', color: '#28a745' }}>
-                  Web Worker Results
+                  Web worker results
                 </h5>
                 <div style={{ fontSize: '0.9rem', lineHeight: '1.4' }}>
                   <div>{workerResult.result}</div>

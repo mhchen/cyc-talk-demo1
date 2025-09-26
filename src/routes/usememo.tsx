@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import TestCase from '../components/TestCase';
 import { WallClockTestOrchestrator } from '../components/WallClockTestOrchestrator';
 import { DemoLayout } from '../components/shared/DemoLayout';
@@ -37,6 +37,7 @@ function UseMemoDemo() {
   );
   const [currentTest, setCurrentTest] = useState<string | null>(null);
   const [activeTestRunner, setActiveTestRunner] = useState<string | null>(null);
+  const pendingTestResolve = useRef<(() => void) | null>(null);
 
   const handleTestComplete = useCallback(
     (testId: string, result: TestResult) => {
@@ -46,6 +47,12 @@ function UseMemoDemo() {
       }));
       setActiveTestRunner(null);
       setCurrentTest(null);
+
+      // Resolve the pending test promise if this test was awaited
+      if (pendingTestResolve.current) {
+        pendingTestResolve.current();
+        pendingTestResolve.current = null;
+      }
     },
     []
   );
@@ -132,17 +139,17 @@ return fibonacci(20);`,
     []
   );
 
-  const testCases = createTestCases();
+  const testCases = useMemo(() => createTestCases(), [createTestCases]);
 
   const runTest = async (testCase: TestCaseType): Promise<void> => {
-    setCurrentTest(testCase.id);
-    setActiveTestRunner(testCase.id);
-
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    return new Promise((resolve) => {
+      pendingTestResolve.current = resolve;
+      setCurrentTest(testCase.id);
+      setActiveTestRunner(testCase.id);
+    });
   };
 
   const runAllTests = async () => {
-    console.log('Starting all tests...');
     setIsRunning(true);
     setTestResults({});
 
@@ -152,13 +159,11 @@ return fibonacci(20);`,
     }
 
     setIsRunning(false);
-    console.log('All tests complete!');
   };
 
   const resetDemo = () => {
     setTestResults({});
     setCurrentTest(null);
-    console.log('Demo reset');
   };
 
   return (
@@ -183,7 +188,7 @@ return fibonacci(20);`,
       <div className="test-cases">
         {testCases.map((testCase) => (
           <TestCase
-            key={testCase.id}
+            key={`${testCase.id}-${testResults[testCase.id] ? 'complete' : 'pending'}`}
             test={testCase}
             isRunning={currentTest === testCase.id}
             result={testResults[testCase.id] || null}

@@ -13,7 +13,7 @@ export const Route = createRootRoute({
         gap: '2rem'
       }}>
         <h1 style={{ margin: 0, fontSize: '1.5rem', color: '#333' }}>
-          React Performance Demos
+          React performance demos
         </h1>
         <nav style={{ display: 'flex', gap: '1rem' }}>
           <Link
@@ -50,7 +50,7 @@ export const Route = createRootRoute({
               }
             }}
           >
-            useMemo Demo
+            useMemo demo
           </Link>
           <Link
             to="/spinner"
@@ -68,7 +68,25 @@ export const Route = createRootRoute({
               }
             }}
           >
-            Spinner Demo
+            Spinner demo
+          </Link>
+          <Link
+            to="/worker"
+            style={{
+              padding: '0.5rem 1rem',
+              textDecoration: 'none',
+              backgroundColor: '#007acc',
+              color: 'white',
+              borderRadius: '4px',
+              fontSize: '0.9rem'
+            }}
+            activeProps={{
+              style: {
+                backgroundColor: '#005999'
+              }
+            }}
+          >
+            Worker demo
           </Link>
         </nav>
       </div>
