@@ -1,28 +1,23 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { DemoLayout } from '../components/shared/DemoLayout';
 import { Button } from '../components/shared/Button';
 import { LoadingIndicator } from '../components/shared/LoadingIndicator';
+import { fibonacci } from '../utils/performance';
 
 export const Route = createFileRoute('/spinner')({
   component: SpinnerDemo,
-})
+});
 
 function SpinnerDemo() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('Click a button');
   const [renderCount, setRenderCount] = useState(0);
 
-  // CPU-intensive synchronous work
-  const heavyWork = (iterations = 50000000) => {
-    let result = 0;
-    for (let i = 0; i < iterations; i++) {
-      result += Math.sqrt(i);
-    }
-    return result;
+  const heavyWork = () => {
+    return fibonacci(38);
   };
 
-  // Version 1: Promise chain (microtasks) - spinner won't show
   const handlePromiseChain = () => {
     setLoading(true);
     setMessage('Processing...');
@@ -115,7 +110,7 @@ function SpinnerDemo() {
           border: '2px solid #ccc',
           margin: '20px 0',
           borderRadius: '8px',
-          backgroundColor: '#fff'
+          backgroundColor: '#fff',
         }}
       >
         {loading ? (
@@ -123,9 +118,6 @@ function SpinnerDemo() {
         ) : (
           <div style={{ fontSize: '24px', textAlign: 'center' }}>
             <div>{message}</div>
-            <div style={{ fontSize: '14px', color: '#666', marginTop: '0.5rem' }}>
-              Render count: {renderCount} | Open console to see timing
-            </div>
           </div>
         )}
       </div>
