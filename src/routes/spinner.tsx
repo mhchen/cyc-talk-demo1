@@ -105,16 +105,6 @@ function SpinnerDemo() {
           </Button>
         </>
       }
-      explanation={
-        <>
-          <h3 style={{ margin: '0 0 1rem 0', color: '#333' }}>How It Works</h3>
-          <div style={{ lineHeight: '1.6', color: '#555' }}>
-            <p><strong>Promise Chain:</strong> All work happens in microtasks, which prevent the browser from rendering between tasks.</p>
-            <p><strong>setTimeout:</strong> Creates a macrotask that allows the browser to render the spinner before processing.</p>
-            <p><strong>Async with Breaks:</strong> Uses setTimeout(0) to yield control back to the browser for rendering.</p>
-          </div>
-        </>
-      }
     >
       <div
         style={{

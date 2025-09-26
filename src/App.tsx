@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import './App.css';
 import TestCase from './components/TestCase';
 import { WallClockTestOrchestrator } from './components/WallClockTestOrchestrator';
 import {
